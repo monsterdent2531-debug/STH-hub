@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@500;600;700;800&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0a1330;
+    --navy-2: #0f1a42;
+    --panel: #16215494;
+    --panel-solid: #16214f;
+    --line: rgba(255,255,255,0.09);
+    --white: #ffffff;
+    --dim: rgba(255,255,255,0.55);
+    --yellow: #e6ff3a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Inter', 'Sarabun', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- decorative ghost-type backdrop, echoing the layered wordmark texture ---- */
+  .ghost{
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 420px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 92%);
+            mask-image: linear-gradient(to bottom, black 30%, transparent 92%);
+  }
+  .ghost span{
+    display:block;
+    white-space: nowrap;
+    font-family: 'Archivo Black', sans-serif;
+    font-style: italic;
+    font-size: 92px;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--navy-2);
+    transform: skewX(-8deg);
+  }
+  .ghost span:nth-child(3){ color: rgba(230,255,58,0.06); }
+
+  .wrap{
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 64px 20px 80px;
+  }
+
+  header{ margin-bottom: 44px; }
+  .badge{
+    display:inline-block;
+    font-family:'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    color: var(--navy);
+    background: var(--yellow);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  h1{
+    font-family: 'Archivo Black', sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(38px, 9vw, 58px);
+    line-height: 0.94;
+    letter-spacing: -0.01em;
+    transform: skewX(-4deg);
+    margin: 0 0 16px;
+    color: var(--white);
+  }
+  header p{
+    margin: 0;
+    color: var(--dim);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 42ch;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin: 0 0 16px;
+  }
+  .section-head h2{
+    font-family:'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin:0;
+  }
+  .section-head .count{
+    font-family:'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--yellow);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .grid .full{
+    grid-column: 1 / -1;
+  }
+
+  a.pill{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap: 3px;
+    background: var(--panel-solid);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    text-decoration:none;
+    color: var(--white);
+    min-width:0;
+    transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+  }
+  a.pill::after{
+    content: "";
+    position:absolute;
+    top: 16px; right: 16px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    transition: all 0.16s ease;
+  }
+  a.pill:hover, a.pill:focus-visible{
+    background: var(--yellow);
+    color: var(--navy);
+    border-color: var(--yellow);
+    transform: translateY(-2px);
+  }
+  a.pill:hover::after, a.pill:focus-visible::after{
+    border-color: var(--navy);
+    background: var(--navy);
+    box-shadow: inset 0 0 0 3px var(--yellow);
+  }
+  a.pill:focus-visible{ outline: none; }
+  .pill-tag{
+    font-family:'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    transition: color 0.16s ease;
+  }
+  a.pill:hover .pill-tag, a.pill:focus-visible .pill-tag{ color: var(--navy) !important; opacity: 0.65; }
+  .pill-tag.tag-thailand{ color: #ff9a3c; }
+  .pill-tag.tag-bgpu{ color: #4fc3f7; }
+  .pill-title{
+    font-family:'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    padding-right: 22px;
+  }
+  .pill-url{
+    font-family:'Inter', sans-serif;
+    font-size: 11.5px;
+    color: var(--dim);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    transition: color 0.16s ease;
+  }
+  a.pill:hover .pill-url, a.pill:focus-visible .pill-url{ color: rgba(10,19,48,0.65); }
+
+  footer{
+    position:relative;
+    z-index:1;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-family:'Sarabun', sans-serif;
+    font-size: 12.5px;
+    color: var(--dim);
+  }
+
+  @media (max-width: 420px){
+    .grid{ gap: 8px; }
+    a.pill{ padding: 15px 14px 13px; border-radius: 14px; }
+    .pill-title{ font-size: 15px; }
+    .ghost span{ font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="ghost" aria-hidden="true">
+    <span>NORTH LONDON &nbsp; COME ON YOU SPURS &nbsp; N17</span>
+    <span>TO DARE IS TO DO &nbsp; NORTH LONDON &nbsp; N17</span>
+    <span>COME ON YOU SPURS &nbsp; TO DARE IS TO DO</span>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <span class="badge">COYS</span>
+      <h1>Content Hub</h1>
+      <p>รวมเครื่องมือและคอนเทนต์ทั้งหมดไว้ในที่เดียว แตะการ์ดเพื่อเปิดแต่ละหน้า</p>
+    </header>
+
+    <section>
+      <div class="section-head">
+        <h2>Content</h2>
+        <span class="count">8 links</span>
+      </div>
+      <div class="grid">
+        <a class="pill full" href="https://new-writer.vercel.app/" target="_blank" rel="noopener">
+          <span class="pill-tag">Content</span>
+          <span class="pill-title">Content</span>
+          <span class="pill-url">new-writer.vercel.app</span>
+        </a>
+        <a class="pill" href="https://spurs-lineup.vercel.app" target="_blank" rel="noopener">
+          <span class="pill-tag">Spurs Content</span>
+          <span class="pill-title">Line Up</span>
+          <span class="pill-url">spurs-lineup.vercel.app</span>
+        </a>
+        <a class="pill" href="https://sc-fulltime.vercel.app" target="_blank" rel="noopener">
+          <span class="pill-tag">Spurs Content</span>
+          <span class="pill-title">Full Time</span>
+          <span class="pill-url">sc-fulltime.vercel.app</span>
+        </a>
+        <a class="pill" href="https://spurs-predicted-lineup.vercel.app/" target="_blank" rel="noopener">
+          <span class="pill-tag">Spurs Content</span>
+          <span class="pill-title">Predicted Lineup</span>
+          <span class="pill-url">spurs-predicted-lineup.vercel.app</span>
+        </a>
+        <a class="pill" href="https://match-summary-rho.vercel.app" target="_blank" rel="noopener">
+          <span class="pill-tag">Spurs Content</span>
+          <span class="pill-title">Match Summary</span>
+          <span class="pill-url">match-summary-rho.vercel.app</span>
+        </a>
+        <a class="pill" href="https://sth-lineup-hmso.vercel.app" target="_blank" rel="noopener">
+          <span class="pill-tag tag-thailand">Spurs Thailand</span>
+          <span class="pill-title">Line Up</span>
+          <span class="pill-url">sth-lineup-hmso.vercel.app</span>
+        </a>
+        <a class="pill" href="https://sth-fulltime.vercel.app" target="_blank" rel="noopener">
+          <span class="pill-tag tag-thailand">Spurs Thailand</span>
+          <span class="pill-title">Full Time</span>
+          <span class="pill-url">sth-fulltime.vercel.app</span>
+        </a>
+        <a class="pill full" href="https://bgpu-lineup.vercel.app/?v=3" target="_blank" rel="noopener">
+          <span class="pill-tag tag-bgpu">BGPU</span>
+          <span class="pill-title">Line Up</span>
+          <span class="pill-url">bgpu-lineup.vercel.app</span>
+        </a>
+      </div>
+    </section>
+
+    <section style="margin-top:44px;">
+      <div class="section-head">
+        <h2>Match Summary — Inline</h2>
+      </div>
+      <div style="border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--panel-solid);">
+        <iframe src="https://match-summary-rho.vercel.app"
+                style="width:100%; height:640px; border:none; display:block;"
+                loading="lazy">
+        </iframe>
+      </div>
+    </section>
+
+    <footer>อัปเดตล่าสุด: กันยายน 2026</footer>
+  </div>
+</body>
+</html>
